@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="vehicle_service_history_view_tree" model="ir.ui.view">
+        <field name="name">vehicle.service.history.view.tree</field>
+        <field name="model">vehicle.service.history</field>
+        <field name="arch" type="xml">
+            <tree string="Service History">
+                <field name="date" />
+                <field name="customer_name" string="Customer Name" />
+                <field name="vehicle_registration_number" string="Vehicle Number" />
+                <field name="vehicle_model" string="Vehicle Model" />
+                <field name="usage_mileage" string="Usage/Mileage(KM)" />
+                <field name="item_name" string="Item Name" />
+                <field name="quantity" />
+                <field name="price" />
+                <field name="supplier" />
+            </tree>
+        </field>
+    </record>
+
+    <record id="vehicle_service_history_view_form" model="ir.ui.view">
+        <field name="name">vehicle.service.history.view.form</field>
+        <field name="model">vehicle.service.history</field>
+        <field name="arch" type="xml">
+            <form string="Service History">
+                <sheet>
+                    <div class="oe_title">
+                        <h4>Vehicle</h4>
+                        <h1>
+                            <field name="vehicle" nolabel="1" style="width:380px" widget="many2one" string="Vehicle" />
+                        </h1>
+                        <div class="o_row"></div>
+                        <h4>Model</h4>
+                        <h1>
+                            <field name="vehicle_model" nolabel="1" style="width:380px" string="Vehicle Model" />
+                        </h1>
+                        <div class="o_row"></div>
+                        <h4 style="width:280px">Vehicle Remarks</h4>
+                        <h3>
+                            <field name="vehicle_remarks" />
+                            <field name="vehicle_registration_number" />
+                        </h3>
+                    </div>
+                    <group>
+                        <group>
+                            <separator string="INVOICE"/>
+                            <field name="account_move_line_id" string="Move Line" />
+                            <field name="account_move_id" string="Account" />
+                            <field name="invoice_number" />
+                            <field name="invoice_amount" />
+                            <field name="remarks" />
+                            <field name="branch" />
+                            <field name="currency_id" string="Company Currency" />
+                        </group>
+                        <group>
+                            <separator string="SERVICE HISTORY"/>
+                            <field name="customer_name" />
+                            <field name="date" />
+                            <field name="item_name" />
+                            <field name="item_code" />
+                            <field name="item_remarks" />
+                            <field name="usage_mileage" />
+                            <field name="quantity" />
+                            <field name="price" />
+                            <field name="cost" />
+                            <field name="salesman" />
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+   
+    
+    <record id="vehicle_service_history_view_search" model="ir.ui.view">
+        <field name="name">vehicle.service.history.view.search</field>
+        <field name="model">vehicle.service.history</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer_name" string="Customer" />
+                <field name="vehicle_registration_number" string="Vehicle Number" />
+    
+                <filter 
+                    name="filter_year" 
+                    string="This Year" 
+                    domain="[('date', '&lt;=', context_today().strftime('%%Y-%%m-%%d')), ('date', '>=', context_today().strftime('%%Y-01-01'))]"/>
+      
+                <filter
+                    name="last_week"
+                    string="Last 7 Days"
+                    domain="[('date', '>=', (context_today() - datetime.timedelta(days=6)).strftime('%%Y-%%m-%%d'))]"/>
+
+                <filter name="date" string="Date" date="date" />
+
+                <filter name="filter_365" string="365 Days" 
+                domain="[('date', '>=', (context_today() + relativedelta(days=-365)).strftime('%Y-%m-%d'))]"/>
+
+                <filter name="group_by_registration_number" string="Group By Number"
+                    context="{'group_by': 'vehicle_registration_number'}" />
+                    
+            </search>
+        </field>
+    </record>
+    
+
+    <record id="action_vehicle_service_history" model="ir.actions.act_window">
+        <field name="name">Service History</field>
+        <field name="res_model">vehicle.service.history</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'search_default_filter_365':1, 'search_default_group_by_registration_number':1}</field>
+    </record>
+    
+    <record id="action_vehicle_service_smart_button" model="ir.actions.act_window">
+        <field name="name">Service History (Vehicle)</field>
+        <field name="res_model">vehicle.service.history</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[('vehicle', '=', active_id)]</field>
+
+    </record>
+
+</odoo>
+
+<!-- <record id="vehicle_service_history_view_search" model="ir.ui.view">
+        <field name="name">vehicle.service.history.view.search</field>
+        <field name="model">vehicle.service.history</field>
+        <field name="arch" type="xml">
+            <search>
+                
+
+                <filter 
+                    name="filter_year" 
+                    string="This Year" 
+                    domain="[
+                        ('date','&lt;=',context_today().strftime('%%Y-%%m-%%d')),
+                        ('date','>=',context_today().strftime('%%Y-01-01'))]"/>
+
+                <filter 
+                    icon="terp-go-today" 
+                    string="This Month" 
+                    domain="[
+                    ('date','&lt;=',context_today().strftime('%%Y-%%m-%%d')),
+                    ('date','>=',context_today().strftime('%%Y-%%m-01'))]"/>
+
+                <filter
+                    name='last_week'
+                    string='Last 7 Days'
+                    domain="[('date', '>=', (context_today() + datetime.datetime.timedelta(-6)).strftime('%Y-%m-%d'))]"/>
+
+                <filter 
+                    name='today'
+                    string='Today'
+                    domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+
+                <filter
+                    name="filter_quarter_1"
+                    string="Q1"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-01-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-03-31')),
+                        ]"/>
+                        
+                <filter
+                    name="filter_quarter_2"
+                    string="Q2"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-04-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-06-30'))
+                    ]"/>
+
+                <filter
+                    name="filter_quarter_3"
+                    string="Q3"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-07-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-09-30'))
+                    ]"/>
+
+                <filter
+                    name="filter_quarter_4"
+                    string="Q4"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-10-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-12-31'))
+                    ]"/>
+            </search>
+        </field>
+    </record> -->
+
+    <!-- <record id="service_history_test_search" model="ir.ui.view">
+        <field name="name">service.history.view</field>
+        <field name="model">vehicle.service.history</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="customer_name" string="Customer" />
+                <field name="vehicle_registration_number" string="Vehicle Number" />
+
+                <filter 
+                    name="filter_year" 
+                    string="This Year" 
+                    domain="[
+                        ('date','&lt;=',context_today().strftime('%%Y-%%m-%%d')),
+                        ('date','>=',context_today().strftime('%%Y-01-01'))]"/>
+                
+                <filter 
+                    icon="terp-go-today" 
+                    string="This Month" 
+                    domain="[
+                    ('date','&lt;=',context_today().strftime('%%Y-%%m-%%d')),
+                    ('date','>=',context_today().strftime('%%Y-%%m-01'))]"/>
+
+                <filter
+                    name='last_week'
+                    string='Last 7 Days'
+                    domain="[('date', '>=', (context_today() + datetime.datetime.timedelta(-6)).strftime('%Y-%m-%d'))]"/>
+
+                <filter 
+                    name='today'
+                    string='Today'
+                    domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+
+                <filter
+                    name="filter_quarter_1"
+                    string="Q1"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-01-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-03-31')),
+                        ]"/>
+                        
+                <filter
+                    name="filter_quarter_2"
+                    string="Q2"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-04-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-06-30'))
+                    ]"/>
+
+                <filter
+                    name="filter_quarter_3"
+                    string="Q3"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-07-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-09-30'))
+                    ]"/>
+
+                <filter
+                    name="filter_quarter_4"
+                    string="Q4"
+                    domain="[
+                        ('date', '>=', context_today().strftime('%Y-10-01')),
+                        ('date', '&lt;=', context_today().strftime('%Y-12-31'))
+                    ]"/>
+
+                <filter
+                    name="vehicle_number_group"
+                    string="Group By Registration Number"
+                    context="{'group_by': 'vehicle_registration_number'}"
+                    />
+
+                <filter 
+                    name="last_year" 
+                    string="Last 365 Days" 
+                    domain="[('date', '>=', get_date_before_365_days())]"
+                    />
+
+            </search>
+        </field>
+    </record> -->
+
+
+
+<!-- <filter 
+                    icon="terp-go-today" 
+                    string="This Month" 
+                    domain="[('date', '&lt;=', context_today().strftime('%%Y-%%m-%%d')), ('date', '>=', context_today().strftime('%%Y-%%m-01'))]"/>
+
+                <filter 
+                    name="today"
+                    string="Today"
+                    domain="[('date', '=', context_today().strftime('%%Y-%%m-%%d'))]"/>
+    
+                <filter
+                    name="filter_quarter_1"
+                    string="Q1"
+                    domain="[('date', '>=', context_today().strftime('%%Y-01-01')), ('date', '&lt;=', context_today().strftime('%%Y-03-31'))]"/>
+                            
+                <filter
+                    name="filter_quarter_2"
+                    string="Q2"
+                    domain="[('date', '>=', context_today().strftime('%%Y-04-01')), ('date', '&lt;=', context_today().strftime('%%Y-06-30'))]"/>
+    
+                <filter
+                    name="filter_quarter_3"
+                    string="Q3"
+                    domain="[('date', '>=', context_today().strftime('%%Y-07-01')), ('date', '&lt;=', context_today().strftime('%%Y-09-30'))]"/>
+    
+                <filter
+                    name="filter_quarter_4"
+                    string="Q4"
+                    domain="[('date', '>=', context_today().strftime('%%Y-10-01')), ('date', '&lt;=', context_today().strftime('%%Y-12-31'))]"/> -->

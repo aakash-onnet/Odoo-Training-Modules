@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Tree View For Doctors -->
+
+    <record id="view_hospital_doctor_view" model="ir.ui.view">
+        <field name="name">hospital.doctor.tree</field>
+        <field name="model">hospital.doctor</field>
+        <field name="arch" type="xml">
+            <tree string="Doctors">
+                <field name="name" string="Doctor Name" optional="show"/>
+                <field name="experties" string="Doctor Experties" optional="show"/>
+                <field name="salary" string="Doctor Salary" />
+                <field name="experience" string="Doctor Experience" />
+                <field name="joining_date" string="Joining Date" />
+            </tree>
+        </field>
+    </record>
+
+    <!-- Search View For Doctors -->
+
+    <record id="view_hospital_doctor_search" model="ir.ui.view">
+        <field name="name">hospital.doctor.search</field>
+        <field name="model">hospital.doctor</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Doctor Name" />
+                <field name="experties" string="Doctor experties"/>
+                <field name="experience" string="Doctor Experience"/>
+                <field name="salary" string="Doctor Salary" />
+
+                <filter name="gender_male" string="Male" domain="[('gender', '=', 'male')]" />
+                <filter name="gender_female" string="Female" domain="[('gender', '=', 'female')]" />
+                <filter name="is_professor" string="Professor" domain="[('is_professor', '=', True)]" />
+                <filter name="high_salary_doctor" string="Highly Paid" domain="[('salary', '>=', '50000')]" />
+                <filter name="archived_doctors" string="Archived Doctors" domain="[('active', '=', False)]" />
+
+                <filter name="group_by_experience" string="Experience" context="{'group_by': 'experience'}" />
+                <filter name="group_by_experties" string="Experties" context="{'group_by':'experties'}" />
+            </search>
+        </field>
+    </record>
+
+
+    <!-- Form View of Doctor -->
+
+    <record id="view_hospital_doctor_form" model="ir.ui.view">
+        <field name="name">hospital.doctor.form</field>
+        <field name="model">hospital.doctor</field>
+        <field name="arch" type="xml">
+            <form string="Doctor">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" />
+                            <field name="experties" />
+                            <field name="joining_date" />
+                            <field name="experience" />
+                        </group>
+                        <group>
+                            <field name="is_professor" />
+                            <field name="gender" />
+                            <field name="salary" />
+                            <field name="active" invisible="1" />
+                        </group>
+                    </group>
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_users"/>
+                    <field name="message_ids"/>
+                 </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action For Doctor Menu -->
+
+    <record id="action_hospital_doctor" model="ir.actions.act_window">
+        <field name="name">Doctor</field>
+        <field name="res_model">hospital.doctor</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+</odoo>

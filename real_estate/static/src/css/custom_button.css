@@ -1,0 +1,27 @@
+.custom_button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.custom_button i {
+    font-size: 18px;
+    margin-right: 10px;
+}
+
+.custom_button_content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.custom_button_content .oe_stat_text {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.custom_button_content .oe_stat_number {
+    font-size: 18px;
+    color: #333;
+}

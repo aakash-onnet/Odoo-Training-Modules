@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem
+            id="hospital_management_root"
+            name="HMS"
+            web_icon="lg_hospital,static/description/icon.png"
+            sequence="21" />
+
+    <menuitem
+            id="menu_front_desk"
+            name="Front Desk"
+            parent="hospital_management_root"
+            action="action_hospital_patient" />
+
+    <menuitem
+            id="patients_desk"
+            name="Patients"
+            parent="menu_front_desk"
+            action="action_hospital_patient" />
+
+    <menuitem
+            id="readonly_patients_desk"
+            name="View Patients"
+            parent="menu_front_desk"
+            action="action_hospital_readonly_patient" />
+
+    <menuitem
+            id="doctors_desk"
+            name="Doctors"
+            parent="hospital_management_root"
+            action="action_hospital_doctor" />
+
+    <menuitem
+        id="menu_female_patient"
+        name="Female Patient"
+        parent="menu_front_desk"
+        action="action_hospital_female_patient" />
+
+</odoo>

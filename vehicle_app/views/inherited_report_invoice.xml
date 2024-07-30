@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<template id="report_invoice_customized" inherit_id="account.report_invoice_document">
+	    <xpath expr="//div[@id='informations']" position="inside">
+	    	<div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2" name="vehicle_registration_number">
+                <strong>Vehicle Registration Number:</strong><br/>
+                <span t-field="o.vehicle_registration_number">2023-10-31</span>
+            </div>
+            <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2" name="vehicle_remarks">
+                <strong>Vehicle Remarks:</strong><br/>
+                <span t-field="o.vehicle_remarks">2023-10-31</span>
+            </div>
+            <div t-attf-class="#{'col-auto col-3 mw-100' if report_type != 'html' else 'col'} mb-2" name="usage_mileage">
+                <strong>Vehicle Usage/Mileage : </strong><br/>
+                <span t-field="o.usage_mileage">2023-10-31</span>
+            </div>
+	   	</xpath>
+	   	<xpath expr="//table[@name='invoice_line_table']/thead/tr/th[@name='th_quantity']" position="after">
+	   		<th name="th_cost" class="text-end"><span>Cost</span></th>
+	   	</xpath>
+	   	<xpath expr="//td[@name='td_quantity']" position="after">
+	   		<td name="td_cost" t-if="line.cost" class="text-end">
+                <span t-field="line.cost">3.00</span>
+            </td>
+	   	</xpath>
+	</template>
+</odoo>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+    <record id="action_vehicle" model="ir.actions.act_window">
+        <field name="name">Vehicles</field>
+        <field name="res_model">vehicle</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="action_manufacturer" model="ir.actions.act_window">
+        <field name="name">Vehicle Manufacturer</field>
+        <field name="res_model">fleet.vehicle.model.brand</field>
+        <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <record id="action_models" model="ir.actions.act_window">
+        <field name="name">Vehicle Models</field>
+        <field name="res_model">fleet.vehicle.model</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'custom_search': True}</field>
+    </record>
+
+    <menuitem
+        id="vehicle_main_menu"
+        name="Vehicle Management"
+        web_icon="vehicle_app,static/description/icon.png"
+        sequence="10"/>
+
+    <menuitem
+        id="vehicle_sub_menu"
+        name="Vehicle"
+        parent="vehicle_main_menu"
+        action="action_vehicle"
+        sequence="5"/>
+    
+    <menuitem
+        id="vehicle_sub_menu_config"
+        name="Configuration"
+        parent="vehicle_main_menu"
+        sequence="10"/>
+
+    <!-- Submenus of Vehicle Main Menu -->
+
+
+    <menuitem 
+        id="vehicle_model_menu"
+        name="Vehicle"
+        parent="vehicle_sub_menu"
+        action="action_vehicle"/>
+
+    <menuitem 
+        id="service_history_menu"
+        name="Service History"
+        parent="vehicle_sub_menu"
+        action="action_vehicle_service_history"/>
+    
+    <!-- Submenus of Configurations -->
+
+
+    <menuitem 
+        id="manufacturers_menu"
+        name="Manufacturers"
+        parent="vehicle_sub_menu_config"
+        action="action_manufacturer"/>
+
+    <menuitem
+        id="models_menu"
+        name="Models"
+        parent="vehicle_sub_menu_config"
+        action="action_models"/>
+    
+
+</odoo>

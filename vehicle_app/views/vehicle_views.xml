@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="vehicle_view_tree" model="ir.ui.view">
+        <field name="name">vehicle.view.tree</field>
+        <field name="model">vehicle</field>
+        <field name="arch" type="xml">
+            <tree string="Vehicles">
+                <field name="vehicle_registration_number" string="Registration Number" />
+                <field name="manufacturer_id" string='Manufacturer' />
+                <field name="model_id" string="Model" />
+                <!-- <field name="model_id" /> -->
+                <field name="engine_number" string="Engine" />
+                <field name="vehicle_registration_date" string="Registration Date" />
+                <field name="chasis_number" string="Chasis Number" />
+                <field name="description" />
+                <field name="remark" />
+                <!-- <field name="milage" /> -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="vehicle_view_form" model="ir.ui.view">
+        <field name="name">vehicle.view.form</field>
+        <field name="model">vehicle</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle">
+                <header>
+                    <button string="Archive" name="archive_vehicle" type="object" class="oe_highlight" invisible="active == False"/>
+                    <button string="Unarchive" name="unarchive_vehicle" type="object" class="oe_highlight" invisible="active == True"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button 
+                            type="action"
+                            name="%(vehicle_app.action_vehicle_service_smart_button)d"
+                            class="btn oe_stat_button btn-outline-secondary d-flex flex-direction-column flex-grow-1 flex-lg-grow-0">
+                            <i class="o_button_icon fa fa-car" title="car"></i>
+                            <div name="sale_order_count" class="o_field_widget o_readonly_modifier o_field_statinfo">
+                                <span class="o_stat_info o_stat_value">
+                                    <field name="service_history_count" nolabel="1" />
+                                </span>
+                                <span class="o_stat_text">Service History</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h4>Model</h4>
+                        <h1>
+                            <field name="model_id" context="{'special_display_name': True}" nolabel="1" style="width:380px"/>
+                            <field name="manufacturer_id" invisible="1"/>
+                        </h1>
+                        <div class="o_row"></div>
+                        <h4 style="width:280px">Vehicle Registration Number</h4>
+                        <h3>
+                            <field name="vehicle_registration_number" groups="vehicle_app.vehicle_user_group" style="width:180px;height:20px" nolabel="1"/>
+                        </h3>
+                    </div>
+                    <separator string="VEHICLE"/>
+                    <group>
+                        <group>
+                            <field name="active" invisible="1"/>
+                            <field name="engine_number" string="Engine" groups="vehicle_app.vehicle_mechanic_group" />
+                            <field name="vehicle_registration_date" groups="vehicle_app.vehicle_user_group" string="Vehicle Registration Date (JPJ)"/>
+                            <field name="description"/>
+                            <field name="remark"/>
+                        </group>
+                        <group>
+                            <field name="chasis_number" groups="vehicle_app.vehicle_mechanic_group" />
+                            <field name="vehicle_creation_date" groups="vehicle_app.vehicle_user_group" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Customers" groups="vehicle_app.vehicle_user_group" string="Customers">
+                            <field name="customer_ids"/>
+                        </page>
+                        <page name="service_history" string="Service History">
+                            <field name="service_history_ids"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="vehicle_view_search" model="ir.ui.view">
+        <field name="name">vehicle.view.search</field>
+        <field name="model">vehicle</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="vehicle_registration_number" string="Registration Number" />
+                <filter name="archived_vehicle" string="Archived Vehicle" domain="[('active', '=', False)]" />
+            </search>
+        </field>
+    </record>
+
+    <!-- <record id="vehicle_view_form" model="ir.ui.view">
+        <field name="name">vehicle.view.form</field>
+        <field name="model">vehicle</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle">
+                <header>
+                    <button string="Archive" name="archive_vehicle" type="object" class="oe_highlight" invisible="active == False" />
+                    <button string="Unarchive" name="unarchive_vehicle" type="object" class="oe_highlight" invisible="active == True" />
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button 
+                        type="action"
+                        name="%(vehicle_app.action_models)d"
+                        class="btn oe_stat_button btn-outline-secondary d-flex flex-direction-column flex-grow-1 flex-lg-grow-0"
+                        >
+                            <i class="o_button_icon fa fa-car"></i>
+                            <div name="sale_order_count" class="o_field_widget o_readonly_modifier o_field_statinfo">
+                                <span class="o_stat_info o_stat_value">
+                                    3
+                                </span>
+                                <span class="o_stat_text">Service History</span>
+                            </div>
+                        </button>
+                    </div>
+                    <group>
+                        <div class="oe_title">
+                            <h4>Model</h4>
+                            <h1>
+                                <field name="model_id" nolabel="1" style="width:380px" />
+                                <field name="manufacturer_id" invisible="1" />
+                            </h1>
+
+                            <div class="o_row"></div>
+                            <h4 style="width:280px">Vehicle Registration Number</h4>
+                            <h3>
+                                <field name="vehicle_registration_number" style="width:180px;height:20px" nolabel="1" />
+                            </h3>
+                        </div>
+                    </group>
+                    <separator string="VEHICLE"/>
+                    <group>
+                        <group>
+                            <field name="active" invisible="1" />
+                            <field name="engine_number" string="Engine" />
+                            <field name="vehicle_registration_date" string="Vehicle Registration Date (JPJ)" />
+                            <field name="description" />
+                            <field name="remark" />
+                        </group>
+                        <group>
+                            <field name="chasis_number" />
+                            <field name="vehicle_creation_date" />
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="Customers" string="Customers">
+                            <field name="customer_ids" />
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_users"/>
+
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record> -->
+
+</odoo>
